@@ -48,7 +48,7 @@
         gain.connect(this.ctx.destination);
         osc.start(now);
         osc.stop(now + 0.045);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // High-tech quantum engage click
@@ -71,7 +71,7 @@
         gain.connect(this.ctx.destination);
         osc.start(now);
         osc.stop(now + 0.13);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // Portal energy surge when initiating spell weave
@@ -95,7 +95,7 @@
         gain.connect(this.ctx.destination);
         osc.start(now);
         osc.stop(now + 0.52);
-      } catch (e) {}
+      } catch (e) { }
     }
   }
 
@@ -505,9 +505,16 @@
       });
     }
 
-    // 3. 3D Subtle Card Tilt Effect following cursor
+    // 3. 3D Subtle Card Tilt Effect following cursor (Refined & gentle)
     const cards = document.querySelectorAll('.glass-card');
     cards.forEach((card) => {
+      const isVisualizer =
+        card.classList.contains('preview-card') ||
+        card.classList.contains('reveal-visualizer-card');
+      // For precision visualizer stages keep tilt minimal to prevent distortion; for sections keep it subtle
+      const divisor = isVisualizer ? 500 : 240;
+      const maxTilt = isVisualizer ? 0.5 : 1.2;
+
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -515,12 +522,16 @@
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
 
-        const tiltX = (y - centerY) / 35;
-        const tiltY = (centerX - x) / 35;
+        let tiltX = (y - centerY) / divisor;
+        let tiltY = (centerX - x) / divisor;
+
+        // Clamp to gentle bounds
+        tiltX = Math.max(-maxTilt, Math.min(maxTilt, tiltX));
+        tiltY = Math.max(-maxTilt, Math.min(maxTilt, tiltY));
 
         card.style.transform = `perspective(1000px) rotateX(${tiltX.toFixed(
           2
-        )}deg) rotateY(${tiltY.toFixed(2)}deg) translateZ(2px)`;
+        )}deg) rotateY(${tiltY.toFixed(2)}deg) translateZ(0.5px)`;
 
         // Update holographic glow coordinate
         card.style.setProperty('--mouse-x', `${x}px`);
