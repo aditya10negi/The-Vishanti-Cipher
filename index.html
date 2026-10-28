@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;">
+  <title>The Vishanti Cipher | Mystic Desktop Steganography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@600;700;800;900&family=Orbitron:wght@500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="app-container">
+
+  <!-- Background Animated Cosmic Aura & Galactic Particle Canvas -->
+  <div class="cosmic-bg">
+    <canvas id="cosmicCanvas" class="cosmic-canvas"></canvas>
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="nebula nebula-3"></div>
+    <div class="cosmic-grid-overlay"></div>
+    <div class="mandala-ring mandala-ring-1"></div>
+    <div class="mandala-ring mandala-ring-2"></div>
+    <div class="mandala-ring mandala-ring-3"></div>
+  </div>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="mandala-icon" id="mandalaIcon">
+        <svg viewBox="0 0 100 100" class="mandala-svg">
+          <!-- Outer Rotating Runic Ring -->
+          <circle cx="50" cy="50" r="47" class="mandala-circle-outer" />
+          <circle cx="50" cy="50" r="41" class="mandala-circle-mid" />
+          <!-- Sacred Geometry Octagram -->
+          <g class="mandala-rot-cw">
+            <polygon points="50,11 89,50 50,89 11,50" class="mandala-square" />
+            <polygon points="50,89 11,50 50,11 89,50" class="mandala-square-2" />
+            <circle cx="50" cy="11" r="2" class="mandala-node" />
+            <circle cx="89" cy="50" r="2" class="mandala-node" />
+            <circle cx="50" cy="89" r="2" class="mandala-node" />
+            <circle cx="11" cy="50" r="2" class="mandala-node" />
+          </g>
+          <!-- Counter-rotating Sacred Hexagram -->
+          <g class="mandala-rot-ccw">
+            <polygon points="50,22 74,64 26,64" class="mandala-triangle" />
+            <polygon points="50,78 26,36 74,36" class="mandala-triangle-inv" />
+            <circle cx="50" cy="50" r="22" class="mandala-circle-inner" />
+          </g>
+          <!-- Core Eye of Agamotto Pupil -->
+          <path d="M 36 50 Q 50 38 64 50 Q 50 62 36 50 Z" class="mandala-eye-contour" />
+          <circle cx="50" cy="50" r="6" class="mandala-core" />
+          <circle cx="50" cy="50" r="2.5" class="mandala-pupil" />
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-title-row">
+          <h1 class="brand-title">THE VISHANTI CIPHER</h1>
+          <span class="hud-version-chip">v2.6</span>
+        </div>
+        <p class="brand-subtitle">
+          <span class="hud-mono-tag">AES-256-GCM</span>
+          <span class="hud-divider">◆</span>
+          <span class="hud-mono-tag">LSB-MATCHING (±1)</span>
+          <span class="hud-divider">◆</span>
+          <span class="hud-mono-tag">SEEDED SCATTERING</span>
+          <span class="hud-divider">◆</span>
+          <span class="hud-mono-tag">STEGANALYSIS IMMUNE</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tab-switcher" role="tablist">
+      <button class="tab-btn active" id="tabSeal" data-view="seal-view" role="tab" aria-selected="true">
+        <span class="tab-glow-indicator"></span>
+        <span class="tab-icon">🔒</span>
+        <span class="tab-text">Seal Spell</span>
+        <span class="tab-badge">Embed</span>
+      </button>
+      <button class="tab-btn" id="tabReveal" data-view="reveal-view" role="tab" aria-selected="false">
+        <span class="tab-glow-indicator"></span>
+        <span class="tab-icon">👁️</span>
+        <span class="tab-text">Reveal Spell</span>
+        <span class="tab-badge">Extract</span>
+      </button>
+    </div>
+
+    <div class="header-status">
+      <span class="status-pulse-ring"></span>
+      <span class="status-dot"></span>
+      <span class="status-label" id="statusLabel">Sanctum Shield Active • Lossless PNG/BMP</span>
+    </div>
+  </header>
+
+  <!-- Main Work Area -->
+  <main class="main-content">
+
+    <!-- =================================================================== -->
+    <!-- VIEW 1: SEAL SPELL (EMBED)                                          -->
+    <!-- =================================================================== -->
+    <section class="view-panel active" id="sealView">
+      <div class="panel-layout">
+
+        <!-- Left Column: Controls & Configuration -->
+        <div class="config-column">
+
+          <!-- Card 1: Host Image Selection -->
+          <div class="card glass-card">
+            <span class="hud-bracket top-left"></span>
+            <span class="hud-bracket top-right"></span>
+            <span class="hud-bracket bottom-left"></span>
+            <span class="hud-bracket bottom-right"></span>
+
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2 class="card-title">1. Host Canvas (Lossless Vessel)</h2>
+              </div>
+              <span class="card-hint">Strictly PNG or BMP</span>
+            </div>
+
+            <div class="drop-zone" id="hostDropZone">
+              <div class="scanner-laser"></div>
+              <input type="file" id="hostFileInput" accept=".png,.bmp" class="visually-hidden">
+              <div class="drop-zone-content" id="hostDropPrompt">
+                <div class="drop-icon-portal">
+                  <div class="portal-orbit-ring"></div>
+                  <div class="drop-icon">🖼️</div>
+                </div>
+                <p class="drop-main-text">Drag & drop lossless host vessel here</p>
+                <p class="drop-sub-text">or <button type="button" class="btn-link" id="btnBrowseHost">Browse Sanctum Vault</button></p>
+                <div class="format-tags">
+                  <span class="tag">PNG (Lossless)</span>
+                  <span class="tag">BMP (Bitmap)</span>
+                </div>
+              </div>
+              <div class="drop-zone-loaded hidden" id="hostLoadedInfo">
+                <div class="thumb-container">
+                  <div class="thumb-glow-frame"></div>
+                  <img id="hostThumbImg" alt="Host Image Thumbnail" class="host-thumb">
+                </div>
+                <div class="host-meta">
+                  <span class="host-name" id="hostFileName">vessel.png</span>
+                  <div class="meta-row">
+                    <span class="meta-item" id="hostDimensions">0 × 0 px</span>
+                    <span class="meta-item" id="hostFormat">PNG</span>
+                  </div>
+                  <button type="button" class="btn-micro" id="btnChangeHost">Change Vessel</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Capacity Engine Gauge (B4) -->
+            <div class="capacity-engine-box">
+              <div class="capacity-header">
+                <span class="capacity-label">Mystic Capacity:</span>
+                <span class="capacity-value" id="capacityValueText">0 Bytes</span>
+              </div>
+              <div class="capacity-bar-track">
+                <div class="capacity-bar-fill" id="capacityBarFill" style="width: 0%;">
+                  <span class="capacity-plasma-flare"></span>
+                </div>
+              </div>
+              <div class="capacity-footer">
+                <span class="capacity-formula" title="Capacity = ((Width * Height * 3) / 8) - 128 bytes">Formula: ((W × H × 3) / 8) - Overhead</span>
+                <span class="capacity-usage" id="capacityUsageText">0% Consumed</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Spell Mode & Plausible Deniability (A2) -->
+          <div class="card glass-card">
+            <span class="hud-bracket top-left"></span>
+            <span class="hud-bracket top-right"></span>
+            <span class="hud-bracket bottom-left"></span>
+            <span class="hud-bracket bottom-right"></span>
+
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2 class="card-title">2. Plausible Deniability Mode</h2>
+              </div>
+              <label class="switch-container">
+                <input type="checkbox" id="chkPlausibleDeniability">
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+            <p class="card-desc">
+              Embed two disjoint secrets (Decoy + Master) using independent seeds on collision-free coordinate lattices.
+            </p>
+
+            <!-- Mode A: Single Payload -->
+            <div class="payload-mode-container" id="singlePayloadContainer">
+              <div class="secret-card primary-secret-box">
+                <div class="secret-box-header">
+                  <span class="secret-badge master">Primary Spell</span>
+                  <div class="payload-type-pills">
+                    <button type="button" class="pill-btn active" data-payload-type="text" data-target="single">Text Spell</button>
+                    <button type="button" class="pill-btn" data-payload-type="file" data-target="single">Secret File</button>
+                  </div>
+                </div>
+
+                <!-- Text Payload Input -->
+                <div class="payload-input-group" id="singleTextInputGroup">
+                  <label for="singleTextPayload" class="field-label">Concealed Message:</label>
+                  <textarea id="singleTextPayload" class="input-textarea" placeholder="Inscribe your arcane secret message here..." rows="3"></textarea>
+                </div>
+
+                <!-- File Payload Input -->
+                <div class="payload-input-group hidden" id="singleFileInputGroup">
+                  <label class="field-label">Secret File to Conceal:</label>
+                  <div class="file-drop-box" id="singleFileDropBox">
+                    <span class="file-drop-icon">📜</span>
+                    <span class="file-drop-text" id="singleFileName">No file selected (Drop any file here)</span>
+                    <button type="button" class="btn-micro" id="btnBrowseSingleFile">Select File</button>
+                  </div>
+                </div>
+
+                <!-- Password Input -->
+                <div class="field-group">
+                  <label for="singlePassword" class="field-label">Master Incantation (Passphrase):</label>
+                  <div class="input-pass-wrapper">
+                    <input type="password" id="singlePassword" class="input-password" placeholder="Enter master passphrase...">
+                    <button type="button" class="btn-toggle-pass" data-for="singlePassword">👁️</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mode B: Dual Payload (Plausible Deniability) -->
+            <div class="payload-mode-container hidden" id="dualPayloadContainer">
+              
+              <!-- Decoy Secret Box (Partition A) -->
+              <div class="secret-card decoy-secret-box">
+                <div class="secret-box-header">
+                  <span class="secret-badge decoy">Decoy Spell (Harmless Cover)</span>
+                  <div class="payload-type-pills">
+                    <button type="button" class="pill-btn active" data-payload-type="text" data-target="decoy">Text</button>
+                    <button type="button" class="pill-btn" data-payload-type="file" data-target="decoy">File</button>
+                  </div>
+                </div>
+                <div class="payload-input-group" id="decoyTextInputGroup">
+                  <textarea id="decoyTextPayload" class="input-textarea" placeholder="Harmless decoy message (e.g. Grocery list for Kamar-Taj)..." rows="2"></textarea>
+                </div>
+                <div class="payload-input-group hidden" id="decoyFileInputGroup">
+                  <div class="file-drop-box" id="decoyFileDropBox">
+                    <span class="file-drop-icon">📜</span>
+                    <span class="file-drop-text" id="decoyFileName">No decoy file selected</span>
+                    <button type="button" class="btn-micro" id="btnBrowseDecoyFile">Select Decoy</button>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label for="decoyPassword" class="field-label">Decoy Incantation (Passphrase):</label>
+                  <div class="input-pass-wrapper">
+                    <input type="password" id="decoyPassword" class="input-password" placeholder="Passphrase for decoy reveal...">
+                    <button type="button" class="btn-toggle-pass" data-for="decoyPassword">👁️</button>
+                  </div>
+                </div>
+                <div class="partition-note">Partition A: Even channel lattice (Collision-free)</div>
+              </div>
+
+              <!-- Primary Secret Box (Partition B) -->
+              <div class="secret-card master-secret-box">
+                <div class="secret-box-header">
+                  <span class="secret-badge master">Sanctum Secret (True Payload)</span>
+                  <div class="payload-type-pills">
+                    <button type="button" class="pill-btn active" data-payload-type="text" data-target="dual-master">Text</button>
+                    <button type="button" class="pill-btn" data-payload-type="file" data-target="dual-master">File</button>
+                  </div>
+                </div>
+                <div class="payload-input-group" id="dualMasterTextInputGroup">
+                  <textarea id="dualMasterTextPayload" class="input-textarea" placeholder="True confidential spell or classified payload..." rows="2"></textarea>
+                </div>
+                <div class="payload-input-group hidden" id="dualMasterFileInputGroup">
+                  <div class="file-drop-box" id="dualMasterFileDropBox">
+                    <span class="file-drop-icon">📜</span>
+                    <span class="file-drop-text" id="dualMasterFileName">No secret file selected</span>
+                    <button type="button" class="btn-micro" id="btnBrowseDualMasterFile">Select Secret</button>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label for="dualMasterPassword" class="field-label">Sanctum Incantation (Master Passphrase):</label>
+                  <div class="input-pass-wrapper">
+                    <input type="password" id="dualMasterPassword" class="input-password" placeholder="Passphrase for true payload reveal...">
+                    <button type="button" class="btn-toggle-pass" data-for="dualMasterPassword">👁️</button>
+                  </div>
+                </div>
+                <div class="partition-note">Partition B: Odd channel lattice (Collision-free)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Cryptographic & Output Parameters -->
+          <div class="card glass-card">
+            <span class="hud-bracket top-left"></span>
+            <span class="hud-bracket top-right"></span>
+            <span class="hud-bracket bottom-left"></span>
+            <span class="hud-bracket bottom-right"></span>
+
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2 class="card-title">3. Output & Anti-Steganalysis Parameters</h2>
+              </div>
+            </div>
+
+            <div class="params-grid">
+              <div class="param-box">
+                <span class="param-name">Target Lossless Format:</span>
+                <div class="format-selector">
+                  <label class="radio-label">
+                    <input type="radio" name="outputFormat" value="png" checked>
+                    <span>Lossless PNG</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="outputFormat" value="bmp">
+                    <span>Lossless BMP</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="param-box">
+                <span class="param-name">Cipher & Embedding:</span>
+                <div class="badge-row">
+                  <span class="tech-badge" title="Authenticated 256-bit encryption">AES-256-GCM</span>
+                  <span class="tech-badge" title="100,000 rounds key derivation">PBKDF2-HMAC-SHA256</span>
+                  <span class="tech-badge highlight" title="±1 embedding eliminates Chi-Square & RS steganalysis vulnerability">LSB Matching (±1)</span>
+                  <span class="tech-badge highlight" title="Deterministic CSPRNG scattered coordinates">Seeded Scattering</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <button type="button" class="btn-primary-action" id="btnSealSpell">
+              <span class="portal-spark-ring"></span>
+              <span class="btn-magic-glow"></span>
+              <span class="btn-icon">⚡</span>
+              <span class="btn-text">Weave & Seal Spell</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Visual Previews & Difference Inspector -->
+        <div class="preview-column">
+          <div class="card glass-card preview-card">
+            <span class="hud-bracket top-left"></span>
+            <span class="hud-bracket top-right"></span>
+            <span class="hud-bracket bottom-left"></span>
+            <span class="hud-bracket bottom-right"></span>
+
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2 class="card-title">Live Mystic Visualizer</h2>
+              </div>
+
+              <!-- Viewport Switcher Tabs -->
+              <div class="viewport-tabs">
+                <button type="button" class="vtab-btn active" data-vtab="split">Split Slider</button>
+                <button type="button" class="vtab-btn" data-vtab="original">Original</button>
+                <button type="button" class="vtab-btn" data-vtab="stego">Stego</button>
+                <button type="button" class="vtab-btn highlight" data-vtab="diff">Difference Map</button>
+              </div>
+            </div>
+
+            <!-- Viewport Stage -->
+            <div class="viewport-stage" id="viewportStage">
+              <!-- Holographic Targeting HUD Reticle Overlay -->
+              <div class="stage-hud-overlay">
+                <span class="reticle-corner r-tl"></span>
+                <span class="reticle-corner r-tr"></span>
+                <span class="reticle-corner r-bl"></span>
+                <span class="reticle-corner r-br"></span>
+                <span class="stage-telemetry-tag top">[FEED // LOSSLESS SENSOR]</span>
+                <span class="stage-telemetry-tag bottom">[CANVAS MATRIX READY]</span>
+              </div>
+
+              <div class="viewport-empty" id="viewportEmpty">
+                <div class="empty-rune-circle">
+                  <svg viewBox="0 0 100 100" class="empty-mandala-svg">
+                    <circle cx="50" cy="50" r="46" class="empty-circ-1" />
+                    <circle cx="50" cy="50" r="38" class="empty-circ-2" />
+                    <polygon points="50,14 86,50 50,86 14,50" class="empty-poly-1" />
+                    <polygon points="50,86 14,50 50,14 86,50" class="empty-poly-2" />
+                    <circle cx="50" cy="50" r="20" class="empty-circ-3" />
+                    <circle cx="50" cy="50" r="7" class="empty-core" />
+                  </svg>
+                  <span class="empty-rune">👁️</span>
+                </div>
+                <p class="empty-text">Load a host canvas and weave a spell to activate the difference map and live visualizer</p>
+              </div>
+
+              <!-- Split Slider View -->
+              <div class="split-slider-container hidden" id="splitViewContainer">
+                <img id="splitOriginalImg" class="split-img split-before" alt="Original Canvas">
+                <div class="split-overlay" id="splitOverlay">
+                  <img id="splitStegoImg" class="split-img split-after" alt="Stego Canvas">
+                </div>
+                <div class="split-handle" id="splitHandle">
+                  <div class="split-line"></div>
+                  <div class="split-knob">⇋</div>
+                </div>
+                <div class="split-labels">
+                  <span class="split-label left" id="splitLabelLeft">Original Vessel</span>
+                  <button type="button" class="split-mode-toggle" id="btnToggleSplitMode" title="Toggle between True Stego and Difference Heatmap Reveal">
+                    <span class="mode-icon">🔮</span>
+                    <span id="splitModeText">Mode: Original ⇋ Stego</span>
+                  </button>
+                  <span class="split-label right" id="splitLabelRight">Sealed Stego</span>
+                </div>
+              </div>
+
+              <!-- Single Image View (Original or Stego) -->
+              <div class="single-image-container hidden" id="singleViewContainer">
+                <img id="singleViewImg" class="viewport-img" alt="Canvas View">
+                <div class="single-view-tag" id="singleViewTag">[FEED // PRISTINE HOST VESSEL]</div>
+              </div>
+
+              <!-- Difference Map View -->
+              <div class="diff-map-container hidden" id="diffViewContainer">
+                <img id="diffUnderlayImg" class="viewport-img diff-underlay hidden" alt="Host Vessel Underlay">
+                <img id="diffMapImg" class="viewport-img diff-img" alt="Amplified Difference Heatmap">
+                <div class="diff-empty-banner hidden" id="diffEmptyBanner">
+                  <span class="diff-banner-icon">🛡️</span>
+                  <span>Host Vessel Pristine • Zero Perturbations Detected</span>
+                </div>
+                <div class="diff-overlay-controls">
+                  <div class="amp-slider-box">
+                    <label for="diffAmpSlider" class="amp-label">Amplification: <span id="ampFactorText">50×</span></label>
+                    <input type="range" id="diffAmpSlider" min="1" max="100" value="50" step="1" class="amp-slider">
+                  </div>
+                  <div class="diff-legend">
+                    <button type="button" class="legend-chip-btn active" id="btnDiffBgMode" title="Toggle background: Cosmic Void vs Host Vessel Overlay">
+                      <span class="legend-dot void-dot"></span>
+                      <span id="diffBgModeText">Cosmic Void</span>
+                    </button>
+                    <button type="button" class="legend-chip-btn" id="btnDiffPulse" title="Toggle animated pulse on modified coordinates">
+                      <span class="legend-dot pulse-dot"></span>
+                      <span id="diffPulseText">Pulse Weave</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Metrics & Inspection Bar -->
+            <div class="metrics-bar" id="metricsBar">
+              <div class="metric-item">
+                <span class="metric-label">Modified Pixels:</span>
+                <span class="metric-val" id="metricPixels">—</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Pixel Perturbation:</span>
+                <span class="metric-val" id="metricPercent">—</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">PSNR Fidelity:</span>
+                <span class="metric-val highlight-gold" id="metricPsnr">—</span>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Steganalysis Defense:</span>
+                <span class="metric-val highlight-green" id="metricDefense">LSB Matching (Chi-Square Immune)</span>
+              </div>
+            </div>
+
+            <!-- Export Stego Image Action (Strictly PNG or BMP) -->
+            <div class="export-bar" id="exportBar">
+              <button type="button" class="btn-save-stego disabled" id="btnSaveStego" disabled>
+                <span class="btn-icon">💾</span>
+                <span class="btn-text">Save Sealed Stego Artifact (Lossless PNG / BMP)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =================================================================== -->
+    <!-- VIEW 2: REVEAL SPELL (EXTRACT)                                      -->
+    <!-- =================================================================== -->
+    <section class="view-panel" id="revealView">
+      <div class="reveal-container">
+
+        <div class="card glass-card reveal-card">
+          <span class="hud-bracket top-left"></span>
+          <span class="hud-bracket top-right"></span>
+          <span class="hud-bracket bottom-left"></span>
+          <span class="hud-bracket bottom-right"></span>
+
+          <div class="card-header text-center">
+            <div class="card-title-group center-group">
+              <h2 class="card-title">Sanctum Revealer: Unseal Embedded Spells</h2>
+            </div>
+            <p class="card-desc">
+              Extract concealed payload using the incantation key. Features silent neutral verification.
+            </p>
+          </div>
+
+          <!-- Stego Image Drop Zone -->
+          <div class="drop-zone reveal-drop-zone" id="revealDropZone">
+            <div class="scanner-laser"></div>
+            <input type="file" id="revealFileInput" accept=".png,.bmp" class="visually-hidden">
+            <div class="drop-zone-content" id="revealDropPrompt">
+              <div class="drop-icon-portal">
+                <div class="portal-orbit-ring cyan"></div>
+                <div class="drop-icon">🔮</div>
+              </div>
+              <p class="drop-main-text">Drag & drop sealed stego image (PNG / BMP)</p>
+              <p class="drop-sub-text">or <button type="button" class="btn-link" id="btnBrowseReveal">Browse Sanctum Vault</button></p>
+            </div>
+            <div class="drop-zone-loaded hidden" id="revealLoadedInfo">
+              <div class="thumb-container">
+                <div class="thumb-glow-frame cyan"></div>
+                <img id="revealThumbImg" alt="Stego Vessel Thumbnail" class="host-thumb">
+              </div>
+              <div class="host-meta">
+                <span class="host-name" id="revealFileName">stego_vessel.png</span>
+                <div class="meta-row">
+                  <span class="meta-item" id="revealDimensions">0 × 0 px</span>
+                  <span class="meta-item" id="revealFormat">PNG</span>
+                </div>
+                <button type="button" class="btn-micro" id="btnChangeReveal">Change Vessel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Incantation Input -->
+          <div class="reveal-input-group">
+            <label for="revealPassword" class="field-label">Incantation (Passphrase):</label>
+            <div class="input-pass-wrapper">
+              <input type="password" id="revealPassword" class="input-password" placeholder="Enter incantation to unlock spell...">
+              <button type="button" class="btn-toggle-pass" data-for="revealPassword">👁️</button>
+            </div>
+            <p class="field-hint">
+              Multi-Payload aware: Entering the Decoy incantation extracts the Decoy payload. Entering the Sanctum Master incantation extracts the true secret.
+            </p>
+          </div>
+
+          <!-- Reveal Action Button -->
+          <button type="button" class="btn-primary-action btn-reveal-action" id="btnRevealSpell">
+            <span class="portal-spark-ring cyan"></span>
+            <span class="btn-magic-glow"></span>
+            <span class="btn-icon">👁️</span>
+            <span class="btn-text">Unseal & Reveal Spell</span>
+          </button>
+
+          <!-- Status & Result Area -->
+          <div class="reveal-result-area" id="revealResultArea">
+
+            <!-- Neutral Silent Failure State (B2 & B3) -->
+            <div class="status-banner neutral hidden" id="revealNeutralBanner">
+              <div class="banner-icon">⚖️</div>
+              <div class="banner-content">
+                <h3 class="banner-title">No incantation detected</h3>
+                <p class="banner-desc">The mystic weave reveals no authentic resonance with the provided incantation.</p>
+              </div>
+            </div>
+
+            <!-- Success State -->
+            <div class="status-banner success hidden" id="revealSuccessBanner">
+              <div class="banner-icon">✨</div>
+              <div class="banner-content">
+                <div class="banner-top">
+                  <h3 class="banner-title">Incantation Verified! Spell Unsealed</h3>
+                  <span class="partition-tag" id="revealPartitionTag">Master Partition</span>
+                </div>
+                <p class="banner-desc" id="revealSuccessDesc">Authenticated via AES-256-GCM with PBKDF2-HMAC-SHA256.</p>
+                
+                <!-- Text Secret Display -->
+                <div class="secret-reveal-box hidden" id="revealTextBox">
+                  <div class="reveal-box-header">
+                    <span class="reveal-box-title">Inscribed Secret Text:</span>
+                    <button type="button" class="btn-copy" id="btnCopySecretText">📋 Copy Secret</button>
+                  </div>
+                  <pre class="secret-text-content" id="revealTextContent"></pre>
+                </div>
+
+                <!-- File Secret Display -->
+                <div class="file-reveal-box hidden" id="revealFileBox">
+                  <div class="file-info-row">
+                    <span class="file-glyph">📜</span>
+                    <div class="file-details">
+                      <span class="file-unsealed-name" id="revealUnsealedFileName">document.pdf</span>
+                      <span class="file-unsealed-size" id="revealUnsealedFileSize">0 KB</span>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-download-file" id="btnExportSecretFile">
+                    <span>⬇️</span>
+                    <span>Export Unsealed File</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Notification Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="renderer.js"></script>
+  <script src="vishantiVisuals.js"></script>
+</body>
+</html>
